@@ -27,8 +27,8 @@
             <br />
             <div class="card">
                 <div class="card-body">
-                    <h1 class="display-4">CurlIt!</h1>
-                    <p class="lead">CurlIt! allows you to send HTTP requests from within your browser using either PHP or JavaScript! Try it out below!</p>
+                    <h1 class="display-4">Curl It!</h1>
+                    <p class="lead">Curl It! allows you to send HTTP requests from within your browser using either PHP or JavaScript! Try it out below!</p>
                 </div>
             </div>
 
@@ -60,8 +60,7 @@
                             </div>
                         </div>
                         <br />
-                        
-                        
+
                         <!-- Headers -->
                         <div class="card">
                             <h5 class="card-header pointer-cursor" id="headersHeading" data-toggle="collapse" data-target="#headersBody" aria-expanded="true" aria-controls="headersBody">
@@ -107,6 +106,59 @@
                                                     <a href="#" class="btn btn-info float-right full-w-button"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!-- Authentication -->
+                        <div class="card">
+                            <h5 class="card-header pointer-cursor" id="authHeading" data-toggle="collapse" data-target="#authBody" aria-expanded="true" aria-controls="authBody">
+                                Authentication
+                                <span class="section-dd">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </h5>
+                            <div id="authBody" class="collapse">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group mb-8">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Username..." />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group mb-8">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                                                </div>
+                                                <input type="password" class="form-control" placeholder="Password..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!-- Payload -->
+                        <div class="card">
+                            <h5 class="card-header pointer-cursor" id="payloadHeading" data-toggle="collapse" data-target="#payloadBody" aria-expanded="true" aria-controls="payloadBody">
+                                Payload
+                                <span class="section-dd">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </h5>
+                            <div id="payloadBody" class="collapse">
+                                <div class="card-body" style="height: 225px;">
+                                    <div class="form-row">
+                                        <div class="col-sm-12">
+                                            <div id="editor"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -184,7 +236,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-5">
-                                <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit</a>
+                                <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit Request</a>
                             </div>
                         </div>
 
@@ -238,16 +290,29 @@
         <footer class="page-footer font-small blue">
 
             <!-- Copyright -->
-            <div class="footer-copyright text-center py-3">© Copyright 2019, 
-                <a href="https://github.com/nathan-fiscaletti/" target="_blank"> Nathan Fiscaletti</a>
+            <div class="footer-copyright text-center py-3">
+                © Copyright 2019, Nathan Fiscaletti
             </div>
             <!-- Copyright -->
+
+            <div align="center">
+                <a href="https://github.com/nathan-fiscaletti" target="_blank"><div class='social-icon'><i class="fab fa-github"></i></div></a>
+            </div>
 
         </footer>
         <!-- Footer -->
 
+        <br /><br />
+
         <!-- Javascript Imports -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
         <script type="text/javascript" src="./assets/jquery/js/jquery-3.4.0.js"></script>
         <script type="text/javascript" src="./assets/bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            var editor = ace.edit("editor");
+            //editor.setTheme("ace/theme/monokai");
+            editor.setTheme("ace/theme/chaos");
+            editor.session.setMode("ace/mode/javascript");
+        </script>
     </body>
 </html>

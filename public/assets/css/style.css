@@ -2,12 +2,6 @@
     width: 100%;
 }
 
-body {
-    zoom: 0.8; 
-    -moz-transform: scale(0.8); 
-    -moz-transform-origin: 0 0;
-}
-
 .section-dd {
     position: absolute;
     top: 17px;
@@ -28,4 +22,23 @@ body {
 
 .no-margin-jumbotron {
     margin-bottom: 0px;
+}
+
+.social-icon {
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 24px;
+    padding-top: 3.5px;
+}
+
+#editor { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 190px;
 }
