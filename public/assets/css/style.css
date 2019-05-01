@@ -1,0 +1,31 @@
+.full-w-button {
+    width: 100%;
+}
+
+body {
+    zoom: 0.8; 
+    -moz-transform: scale(0.8); 
+    -moz-transform-origin: 0 0;
+}
+
+.section-dd {
+    position: absolute;
+    top: 17px;
+    right: 16px;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+.sm-icon {
+    padding: 20px;
+    font-size: 30px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.no-margin-jumbotron {
+    margin-bottom: 0px;
+}
