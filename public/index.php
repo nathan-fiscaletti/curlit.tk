@@ -37,210 +37,214 @@
                     <!-- Main Form -->
                     <br />
                     <form>
-                        <!-- Request -->
                         <div class="card">
-                            <h5 class="card-header">Request</h5>
                             <div class="card-body">
-                                <div class="form-row">
-                                    <div class="col-sm-8">
-                                        <div class="input-group mb-8">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
+                                <!-- Request -->
+                                <div class="card">
+                                    <h5 class="card-header">Request</h5>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-sm-8">
+                                                <div class="input-group mb-8">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
+                                                    </div>
+                                                    <input type="text" class="form-control" placeholder="Address..." />
+                                                </div>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="Address..." />
+                                            <div class="col-sm-4">
+                                                <select class="form-control">
+                                                    <option selected>GET</option>
+                                                    <option>POST</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <select class="form-control">
-                                            <option selected>GET</option>
-                                            <option>POST</option>
-                                        </select>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br />
+                                <br />
 
-                        <!-- Headers -->
-                        <div class="card">
-                            <h5 class="card-header pointer-cursor" id="headersHeading" data-toggle="collapse" data-target="#headersBody" aria-expanded="true" aria-controls="headersBody">
-                                Headers
-                                <span class="section-dd">
-                                    <i class="fas fa-chevron-down"></i>
-                                </span>
-                            </h5>
-                            <div id="headersBody" class="collapse">
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                    <th scope="col">Header</th>
-                                                    <th scope="col">Value</th>
-                                                    <th scope="col"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">Content-Type</th>
-                                                        <td><code>application/json</code></td>
-                                                        <td style="width: 1%; white-space: nowrap;"><a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <hr />
+                                <!-- Headers -->
+                                <div class="card">
+                                    <h5 class="card-header pointer-cursor" id="headersHeading" data-toggle="collapse" data-target="#headersBody" aria-expanded="true" aria-controls="headersBody">
+                                        Headers (<code>-H</code>)
+                                        <span class="section-dd">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </h5>
+                                    <div id="headersBody" class="collapse">
+                                        <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-sm-5">
-                                                    <div class="input-group mb-8">
-                                                        <div class="input-group-prepend">
-                                                            <div class="input-group-text"><i class="fas fa-heading"></i></div>
+                                                <div class="col-sm-12">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                            <th scope="col">Header</th>
+                                                            <th scope="col">Value</th>
+                                                            <th scope="col"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Content-Type</th>
+                                                                <td><code>application/json</code></td>
+                                                                <td style="width: 1%; white-space: nowrap;"><a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <hr />
+                                                    <div class="form-row">
+                                                        <div class="col-sm-5">
+                                                            <div class="input-group mb-8">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text"><i class="fas fa-heading"></i></div>
+                                                                </div>
+                                                                <input type="text" class="form-control" placeholder="Header..." />
+                                                            </div>
                                                         </div>
-                                                        <input type="text" class="form-control" placeholder="Header..." />
+                                                        <div class="col-sm-5">
+                                                            <input type="text" class="form-control" placeholder="Value..." />
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <a href="#" class="btn btn-info float-right full-w-button"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-5">
-                                                    <input type="text" class="form-control" placeholder="Value..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <!-- Authentication -->
+                                <div class="card">
+                                    <h5 class="card-header pointer-cursor" id="authHeading" data-toggle="collapse" data-target="#authBody" aria-expanded="true" aria-controls="authBody">
+                                        HTTP Basic Authentication (<code>-u</code>)
+                                        <span class="section-dd">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </h5>
+                                    <div id="authBody" class="collapse">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb-8">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Username..." />
+                                                    </div>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <a href="#" class="btn btn-info float-right full-w-button"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group mb-8">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                                                        </div>
+                                                        <input type="password" class="form-control" placeholder="Password..." />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br />
+                                <br />
 
-                        <!-- Authentication -->
-                        <div class="card">
-                            <h5 class="card-header pointer-cursor" id="authHeading" data-toggle="collapse" data-target="#authBody" aria-expanded="true" aria-controls="authBody">
-                                Authentication
-                                <span class="section-dd">
-                                    <i class="fas fa-chevron-down"></i>
-                                </span>
-                            </h5>
-                            <div id="authBody" class="collapse">
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="col-sm-6">
-                                            <div class="input-group mb-8">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text"><i class="fas fa-user"></i></div>
+                                <!-- Payload -->
+                                <div class="card">
+                                    <h5 class="card-header pointer-cursor" id="payloadHeading" data-toggle="collapse" data-target="#payloadBody" aria-expanded="true" aria-controls="payloadBody">
+                                        Payload (<code>-d</code>)
+                                        <span class="section-dd">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </h5>
+                                    <div id="payloadBody" class="collapse">
+                                        <div class="card-body" style="height: 225px;">
+                                            <div class="form-row">
+                                                <div class="col-sm-12">
+                                                    <div id="editor"></div>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Username..." />
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="input-group mb-8">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text"><i class="fas fa-lock"></i></div>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <!-- Options -->
+                                <div class="card">
+                                    <h5 class="card-header pointer-cursor" id="optionsHeading" data-toggle="collapse" data-target="#optionsBody" aria-expanded="true" aria-controls="optionsBody">
+                                        Options
+                                        <span class="section-dd">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </h5>
+                                    <div id="optionsBody" class="collapse">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-4">
+                                                    <label><b>Curl Options: </b></label>
                                                 </div>
-                                                <input type="password" class="form-control" placeholder="Password..." />
+                                                <div class="col-sm-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                                        <label class="form-check-label" for="inlineCheckbox1">Insecure (<code>-k</code>)</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <!-- Other option -->
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-row">
+                                                <div class="col-sm-4">
+                                                    <label><b>Execute Using: </b></label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                                                        <label class="form-check-label" for="inlineRadio1">PHP (Server Side)</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                        <label class="form-check-label" for="inlineRadio2">JavaScript (Locally) <span class="badge badge-secondary">New</span></label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br />
+                                <br />
 
-                        <!-- Payload -->
-                        <div class="card">
-                            <h5 class="card-header pointer-cursor" id="payloadHeading" data-toggle="collapse" data-target="#payloadBody" aria-expanded="true" aria-controls="payloadBody">
-                                Payload
-                                <span class="section-dd">
-                                    <i class="fas fa-chevron-down"></i>
-                                </span>
-                            </h5>
-                            <div id="payloadBody" class="collapse">
-                                <div class="card-body" style="height: 225px;">
-                                    <div class="form-row">
-                                        <div class="col-sm-12">
-                                            <div id="editor"></div>
-                                        </div>
+                                <!-- Compiled Curl -->
+                                <div class="card">
+                                    <h5 class="card-header">Compiled Curl</h5>
+                                    <div class="card-body">
+        <pre><code>curl -k \
+            -H'Content-Type: application/json' \
+            'https://api.curlit.tk/ip'
+        </code></pre>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br />
 
-                        <!-- Options -->
-                        <div class="card">
-                            <h5 class="card-header pointer-cursor" id="optionsHeading" data-toggle="collapse" data-target="#optionsBody" aria-expanded="true" aria-controls="optionsBody">
-                                Options
-                                <span class="section-dd">
-                                    <i class="fas fa-chevron-down"></i>
-                                </span>
-                            </h5>
-                            <div id="optionsBody" class="collapse">
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="col-sm-4">
-                                            <label><b>Curl Options: </b></label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                <label class="form-check-label" for="inlineCheckbox1">Insecure (<code>-k</code>)</label>
+                                <br />
+
+                                <div class="form-row">
+                                    <div class="col-sm-7">
+                                        <div class="input-group mb-8">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text"><i class="fas fa-share-square"></i>&nbsp; Share this Curl</div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <!-- Other option -->
+                                            <input type="text" class="form-control" disabled value="https://curlit.tk/ac33c177" />
                                         </div>
                                     </div>
-                                    <br />
-                                    <div class="form-row">
-                                        <div class="col-sm-4">
-                                            <label><b>Execute Using: </b></label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
-                                                <label class="form-check-label" for="inlineRadio1">PHP (Server Side)</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                <label class="form-check-label" for="inlineRadio2">JavaScript (Locally) <span class="badge badge-secondary">New</span></label>
-                                            </div>
-                                        </div>
+                                    <div class="col-sm-5">
+                                        <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit Request</a>
                                     </div>
                                 </div>
+
+                                <br /><br />
                             </div>
                         </div>
-                        <br />
-
-                        <!-- Compiled Curl -->
-                        <div class="card">
-                            <h5 class="card-header">Compiled Curl</h5>
-                            <div class="card-body">
-<pre><code>curl -k \
-     -H'Content-Type: application/json' \
-     'https://api.curlit.tk/ip'
-</code></pre>
-                            </div>
-                        </div>
-
-                        <br />
-
-                        <div class="form-row">
-                            <div class="col-sm-7">
-                                <div class="input-group mb-8">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="fas fa-share-square"></i>&nbsp; Share this Curl</div>
-                                    </div>
-                                    <input type="text" class="form-control" disabled value="https://curlit.tk/ac33c177" />
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit Request</a>
-                            </div>
-                        </div>
-
-                        <br /><br />
                     </form>
                 </div>
 
