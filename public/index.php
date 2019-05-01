@@ -40,7 +40,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <!-- Request -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header">Request</h5>
                                     <div class="card-body">
                                         <div class="form-row">
@@ -64,7 +64,7 @@
                                 <br />
 
                                 <!-- Headers -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header pointer-cursor" id="headersHeading" data-toggle="collapse" data-target="#headersBody" aria-expanded="true" aria-controls="headersBody">
                                         Headers (<code>-H</code>)
                                         <span class="section-dd">
@@ -116,7 +116,7 @@
                                 <br />
 
                                 <!-- Authentication -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header pointer-cursor" id="authHeading" data-toggle="collapse" data-target="#authBody" aria-expanded="true" aria-controls="authBody">
                                         HTTP Basic Authentication (<code>-u</code>)
                                         <span class="section-dd">
@@ -149,7 +149,7 @@
                                 <br />
 
                                 <!-- Payload -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header pointer-cursor" id="payloadHeading" data-toggle="collapse" data-target="#payloadBody" aria-expanded="true" aria-controls="payloadBody">
                                         Payload (<code>-d</code>)
                                         <span class="section-dd">
@@ -169,7 +169,7 @@
                                 <br />
 
                                 <!-- Options -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header pointer-cursor" id="optionsHeading" data-toggle="collapse" data-target="#optionsBody" aria-expanded="true" aria-controls="optionsBody">
                                         Options
                                         <span class="section-dd">
@@ -216,7 +216,7 @@
                                 <br />
 
                                 <!-- Compiled Curl -->
-                                <div class="card">
+                                <div class="card dark-card">
                                     <h5 class="card-header">Compiled Curl</h5>
                                     <div class="card-body">
         <pre><code>curl -k \

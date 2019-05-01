@@ -34,6 +34,10 @@
     padding-top: 3.5px;
 }
 
+.dark-card {
+    background-color: #202020;
+}
+
 #editor { 
     position: absolute;
     top: 0;
