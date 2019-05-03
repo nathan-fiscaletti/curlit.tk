@@ -1,7 +1,6 @@
 <?php
 
-chdir('../');
-include './vendor/autoload.php';
+include '../vendor/autoload.php';
 
 use \CurlIt\Content\Page;
 use \CurlIt\Content\PageController;

@@ -28,11 +28,11 @@ abstract class Page
      */
     public function output()
     {
-        if (! file_Exists('./resources/Templates/'.$this->page.'.html')) {
+        if (! file_Exists('../resources/Templates/'.$this->page.'.html')) {
             throw new \Exception('Missing template file: '.$this->page.'.html');
         }
 
-        $output = file_get_contents('./resources/Templates/'.$this->page.'.html');
+        $output = file_get_contents('../resources/Templates/'.$this->page.'.html');
         $matches = [];
         preg_match_all('/(?<={{)(.*)(?=}})/U', $output, $matches);
 
