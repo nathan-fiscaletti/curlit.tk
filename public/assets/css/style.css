@@ -8,6 +8,12 @@
     right: 16px;
 }
 
+.copy-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
 .pointer-cursor {
     cursor: pointer;
 }
@@ -32,6 +38,7 @@
     height: 32px !important;
     font-size: 24px;
     padding-top: 3.5px;
+    cursor: pointer;
 }
 
 .dark-card {

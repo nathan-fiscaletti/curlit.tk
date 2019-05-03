@@ -3,6 +3,11 @@
     "description": "Send curl requests using JavaScript online",
     "type": "project",
     "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "CurlIt\\": "src/CurlIt"
+        }
+    },
     "authors": [
         {
             "name": "Nathan Fiscaletti",
