@@ -45,7 +45,7 @@ class PageController
     public function output()
     {
         foreach ($this->ignorable as $ignorable) {
-            if (strpos($this->route, $ignorable) != -1) {
+            if (strpos($this->route, $ignorable) !== false) {
                 return file_get_contents($route);
             }
         }
