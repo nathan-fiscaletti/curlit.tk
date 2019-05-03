@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <title>Curl It! — HTTP Requests from your browser</title>
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <br />
+            <div class="header clearfix">
+                <nav>
+                    <ul class="nav nav-pills float-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Curl It!&nbsp;<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <br />
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="display-4">Curl It!</h1>
+                    <p class="lead">Fill out the form below to leave us a message. A site administrator will be back with you shortly.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Main Form -->
+                    <br />
+                    <form>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Contact</h4><br />
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Name..." /><br />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="email" class="form-control" placeholder="Email..." /><br />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control" placeholder="Message..." style="height: 150px;"></textarea><br />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-12">
+                                        <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Send Message</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <!-- Footer -->
+        <footer class="page-footer font-small blue">
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">
+                Copyright © 2019, Nathan Fiscaletti
+            </div>
+            <!-- Copyright -->
+
+            <div align="center">
+                <a href="https://github.com/nathan-fiscaletti" target="_blank"><div class='social-icon'><i class="fab fa-github"></i></div></a>
+            </div>
+
+        </footer>
+        <!-- Footer -->
+
+        <br /><br />
+
+        <!-- Javascript Imports -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
+        <script type="text/javascript" src="./assets/jquery/js/jquery-3.4.0.js"></script>
+        <script type="text/javascript" src="./assets/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./assets/js/script.js"></script>
+        <script>
+            // Set up the ACE editor for the "Payload" section.
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/chaos");
+            editor.session.setMode("ace/mode/javascript");
+            editor.setShowPrintMargin(false);
+            editor.renderer.setShowGutter(false);
+            $(".ace_gutter").css("background", "#202020");
+
+            editor.session.on('change', function(delta) {
+                payloadChanged(editor);
+            });
+        </script>
+    </body>
+</html>

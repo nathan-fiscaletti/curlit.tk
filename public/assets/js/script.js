@@ -1,3 +1,17 @@
+// #######################################################
+// # Curl Command Control
+// #######################################################
+
+/**
+ * The generated curl command object
+ * that will be sent to AJAX/JS.
+ */
+let curl_command = {};
+
+/**
+ * Update the Generated Curl command based
+ * on the selections made on the form.
+ */
 function generateShCurlCommand()
 {
     // Generate address & method
@@ -11,11 +25,15 @@ function generateShCurlCommand()
         return;
     }
 
+    curl_command.address = address;
+    curl_command.method = method;
+
     $("#curl-generated-empty").css("display", "none");
     $("#curl-generated-wrapper").css("display", "block");
     $("#curl-generated-copy").css("display", "block");
 
     // Generate Headers
+    curl_command.headers = current_headers;
     let headerStr = "";
     var i;
     for (i = 0; i < current_headers.length; ++i) {
@@ -23,10 +41,12 @@ function generateShCurlCommand()
 
         headerStr += "-H '"+current_header.header+": "+
                      current_header.value+"' \\\r\n     ";
+        
     }
 
     // Generate parameters
     let paramStr = "";
+    curl_command.parameters = current_parameters;
     for (i = 0; i < current_parameters.length; ++i) {
         let current_parameter = current_parameters[i];
 
@@ -44,6 +64,7 @@ function generateShCurlCommand()
 
     // Generate payload
     let payloadStr = "";
+    curl_command.payload = current_payload;
     if (current_payload) {
         payloadStr = "-d '"+current_payload+"'";
     }
@@ -52,6 +73,10 @@ function generateShCurlCommand()
     let basic_user = $("#curl-basic-auth-username").val();
     let basic_pass = $("#curl-basic-auth-password").val();
     let basicAuthStr = "";
+    curl_command.http_auth = {
+        "user": basic_user,
+        "pass": basic_pass
+    };
     if (basic_user && basic_pass) {
         basicAuthStr = "-u " + basic_user + ":" + basic_pass + " \\\r\n     ";
     }
@@ -59,10 +84,27 @@ function generateShCurlCommand()
     // Generate "insecure"
     let insecure = $("#curl-insecure-cb").prop('checked');
     let insecureStr = (insecure) ? "-k " : "";
+    curl_command.insecure = insecure;
+
+    // Generate HTTP Version
+    let http = $("#httpVersionRadio1:checked").val();
+    let httpStr = "";
+    curl_command.http_version = http;
+    if (http) {
+        httpStr = "--http" + http + " ";
+    }
+
+    // Generate TLS Version
+    let tls = $("#tlsVersionRadio1:checked").val();
+    let tlsStr = "";
+    curl_command.tls_version = tls;
+    if (tls) {
+        tlsStr = "--" + tls + " ";
+    }
 
     // Set the final CURL Command
     $("#curl-generated").text(
-        "curl " + insecureStr + basicAuthStr + "-X " + method + " \\\r\n     "+
+        "curl " + insecureStr + httpStr + tlsStr + basicAuthStr + "-X " + method + " \\\r\n     "+
         headerStr +
         payloadStr + ((payloadStr)?" \\\r\n     ":"") +
         "'" + address + paramStr + "'"
@@ -254,6 +296,10 @@ function updateHeaderDisplay(clearInputs)
 // # Copy Button
 // #######################################################
 
+/**
+ * Used to copy text to the clipboard from
+ * the curl-generated element.
+ */
 function copyTextToClipboard() {
     var textArea = document.createElement("textarea");
   
