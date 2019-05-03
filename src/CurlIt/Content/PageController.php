@@ -46,7 +46,7 @@ class PageController
     {
         foreach ($this->ignorable as $ignorable) {
             if (strpos($this->route, $ignorable) !== false) {
-                return file_get_contents($route);
+                return file_get_contents('./'.$this->route);
             }
         }
 
