@@ -19,7 +19,10 @@ $pageController
 ->addPage(
     'contact',
     new \CurlIt\Content\Pages\Contact()
-);
+)
+
+// Ignore specific routes
+->setIgnorable('assets');
 
 // Display the current page.
 echo $pageController->output();

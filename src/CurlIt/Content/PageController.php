@@ -12,6 +12,13 @@ class PageController
     private $pages = [];
 
     /**
+     * URLs that should be ignored.
+     * 
+     * @var array[string]
+     */
+    private $ignorable = [];
+
+    /**
      * The route found at run time.
      * 
      * @var string
@@ -37,6 +44,12 @@ class PageController
      */
     public function output()
     {
+        foreach ($this->ignorable as $ignorable) {
+            if (strpos($this->route, $ignorable) != -1) {
+                return file_get_contents($route);
+            }
+        }
+
         if (! array_key_exists($this->route, $this->pages)) {
             if (! array_key_exists('default', $this->pages)) {
                 throw new Exception('No default route set.');
@@ -49,6 +62,20 @@ class PageController
 
         $page->prepare($this->route);
         return $page->output();
+    }
+
+    /**
+     * Ignore a route and instead serve it's direct content.
+     * 
+     * @param $route
+     * 
+     * @return \CurlIt\Content\PageController
+     */
+    public function setIgnorable($route)
+    {
+        $this->ignorable[] = $route;
+
+        return $this;
     }
 
     /**
