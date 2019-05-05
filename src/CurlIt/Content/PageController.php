@@ -2,12 +2,15 @@
 
 namespace CurlIt\Content;
 
+use CurlIt\Utility\Url;
+use Curlit\Templating\PageTemplate as Page;
+
 class PageController
 {
     /**
      * List of loaded pages.
      * 
-     * @var array[\CurlIt\Content\Page]
+     * @var array[\CurlIt\Templating\TemplatParser]
      */
     private $pages = [];
 
@@ -17,6 +20,13 @@ class PageController
      * @var array[string]
      */
     private $ignorable = [];
+
+    /**
+     * URLs that should be forced.
+     * 
+     * @var array[string]
+     */
+    private $forced = [];
 
     /**
      * The route found at run time.
@@ -44,9 +54,25 @@ class PageController
      */
     public function output()
     {
-        foreach ($this->ignorable as $ignorable) {
-            if (strpos($this->route, $ignorable) !== false) {
-                return file_get_contents('./'.$this->route);
+        if (substr($this->route, strlen($this->route) - 3) == 'css') {
+            header('Content-Type: text/css');
+        } else if (substr($this->route, strlen($this->route) - 2) == 'js') {
+            header('Content-Type: application/json');
+        }
+
+        $forced = false;
+        foreach ($this->forced as $forcable) {
+            if (strpos($this->route, $forcable) !== false) {
+                $forced = true;
+                break;
+            }
+        }
+        
+        if (! $forced) {
+            foreach ($this->ignorable as $ignorable) {
+                if (strpos($this->route, $ignorable) !== false) {
+                    return file_get_contents('./'.$this->route);
+                }
             }
         }
 
@@ -60,8 +86,27 @@ class PageController
             $page = $this->pages[$this->route];
         }
 
-        $page->prepare($this->route);
-        return $page->output();
+        if ($page instanceof Page) {
+            $page->prepare($this->route);
+        }
+
+        return $page->parse();
+    }
+
+    /**
+     * Set a route that will always be loaded
+     * via templating, even if it's in the
+     * ignorable group.
+     * 
+     * @param string $route
+     * 
+     * @return \CurlIt\Content\PageController
+     */
+    public function setForced($route)
+    {
+        $this->forced[] = $route;
+
+        return $this;
     }
 
     /**

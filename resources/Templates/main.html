@@ -1,8 +1,10 @@
 <html>
     <head>
         <title>Curl It! — HTTP Requests from your browser</title>
-        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="stylesheet" href="{{>url (L) assets/bootstrap/css/bootstrap.min.css}}" />
+        <link rel="stylesheet" href="{{>url (L) assets/prism/prism.css}}" />
+        <link rel="stylesheet" href="{{>url (L) assets/css/style.css}}" />
+
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -18,7 +20,7 @@
                             <a class="nav-link active" href="#">Curl It!&nbsp;<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/contact">Contact</a>
+                            <a class="nav-link" href="{{>url (L) contact}}">Contact</a>
                         </li>
                     </ul>
                 </nav>
@@ -49,16 +51,16 @@
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text"><i class="fas fa-globe-americas"></i></div>
                                                     </div>
-                                                    <input type="text" class="form-control" placeholder="Address..." id="curl-address" onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
+                                                    <input type="text" class="form-control" placeholder="Address..." id="curl-address" value="{{curlit_url_value}}" onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <select class="form-control" id="curl-method" onchange="generateShCurlCommand()">
-                                                    <option selected>GET</option>
-                                                    <option>HEAD</option>
-                                                    <option>POST</option>
-                                                    <option>PUT</option>
-                                                    <option>DELETE</option>
+                                                    <option {{> if (is_null($this->localCurl)) {tl_out('checked'); return;} tl_out(($this->localCurl->method == 'GET') ? 'selected' : ''); }}>GET</option>
+                                                    <option {{> if (is_null($this->localCurl)) {return;} tl_out(($this->localCurl->method == 'HEAD') ? 'selected' : ''); }}>HEAD</option>
+                                                    <option {{> if (is_null($this->localCurl)) {return;} tl_out(($this->localCurl->method == 'POST') ? 'selected' : ''); }}>POST</option>
+                                                    <option {{> if (is_null($this->localCurl)) {return;} tl_out(($this->localCurl->method == 'PUT') ? 'selected' : ''); }}>PUT</option>
+                                                    <option {{> if (is_null($this->localCurl)) {return;} tl_out(($this->localCurl->method == 'DELETE') ? 'selected' : ''); }}>DELETE</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -79,7 +81,7 @@
                                             <div class="form-row">
                                                 <div class="col-sm-12">
                                                     <div class="card" id="curl-headers-empty-message" style="display: block;">
-                                                        <h5 class="card-body" style="margin: 0px;">
+                                                        <h5 id='curl-headers-empty-message-content' class="card-body" style="margin: 0px;">
                                                             Add a new header using the form below.
                                                         </h5>
                                                     </div>
@@ -96,7 +98,7 @@
                                                             <!-- Header Visuals will go here -->
                                                         </tbody>
                                                     </table>
-                                                    <div class="form-row">
+                                                    <div id="curl-headers-add-form" class="form-row">
                                                         <div class="col-sm-5">
                                                             <div class="input-group mb-8">
                                                                 <div class="input-group-prepend">
@@ -132,7 +134,7 @@
                                             <div class="form-row">
                                                 <div class="col-sm-12">
                                                     <div class="card" id="curl-parameters-empty-message" style="display: block;">
-                                                        <h5 class="card-body" style="margin: 0px;">
+                                                        <h5 id="curl-parameters-empty-message-content" class="card-body" style="margin: 0px;">
                                                             Add a new parameter using the form below.
                                                         </h5>
                                                     </div>
@@ -149,7 +151,7 @@
                                                             <!-- Parameter Visuals will go here -->
                                                         </tbody>
                                                     </table>
-                                                    <div class="form-row">
+                                                    <div id="curl-parameters-add-form" class="form-row">
                                                         <div class="col-sm-5">
                                                             <div class="input-group mb-8">
                                                                 <div class="input-group-prepend">
@@ -184,7 +186,7 @@
                                         <div class="card-body" style="height: 225px;">
                                             <div class="form-row">
                                                 <div class="col-sm-12">
-                                                    <div id="editor" style="background-color: #202020 !important;"></div>
+                                                    <div id="editor" style="background-color: #202020 !important;">{{curlit_payload_value}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +210,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-user"></i></div>
                                                         </div>
-                                                        <input type="text" class="form-control" id="curl-basic-auth-username" placeholder="Username..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
+                                                        <input type="text" class="form-control" id="curl-basic-auth-username" value="{{curlit_basic_http_user}}" placeholder="Username..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
@@ -216,7 +218,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-lock"></i></div>
                                                         </div>
-                                                        <input type="password" class="form-control" id="curl-basic-auth-password" placeholder="Password..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
+                                                        <input type="password" class="form-control" id="curl-basic-auth-password" value="{{curlit_basic_http_password}}" placeholder="Password..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -241,7 +243,7 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="curl-insecure-cb" value="true" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="checkbox" id="curl-insecure-cb" value="true" onclick="generateShCurlCommand()" {{curlit_inseucre_checked}}>
                                                         <label class="form-check-label" for="curl-insecure-cb">Insecure (<code>-k</code>)</label>
                                                     </div>
                                                 </div>
@@ -262,7 +264,7 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio1" value="1.0" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio2" value="1.0" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">HTTP 1.0</label>
                                                     </div>
                                                 </div>
@@ -274,13 +276,13 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio1" value="1.1" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio3" value="1.1" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">HTTP 1.1</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio1" value="2" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio4" value="2" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">HTTP 2.0</label>
                                                     </div>
                                                 </div>
@@ -292,7 +294,7 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio1" value="2-prior-knowledge" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="httpVersionRadio" id="httpVersionRadio5" value="2-prior-knowledge" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">HTTP 2 (without 1.1)</label>
                                                     </div>
                                                 </div>
@@ -313,7 +315,7 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="tlsv1" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio2" value="tlsv1" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">>= TLSv1</label>
                                                     </div>
                                                 </div>
@@ -325,13 +327,13 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="tlsv1.0" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio3" value="tlsv1.0" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">TLSv1.0</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="tlsv1.1" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio4" value="tlsv1.1" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">TLSv1.1</label>
                                                     </div>
                                                 </div>
@@ -343,13 +345,13 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="tlsv1.2" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio5" value="tlsv1.2" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">TLSv1.2</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="tlsv1.3" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio6" value="tlsv1.3" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">TLSv1.3</label>
                                                     </div>
                                                 </div>
@@ -361,13 +363,13 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="sslv2" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio7" value="sslv2" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">SSLv2</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio1" value="sslv3" onclick="generateShCurlCommand()">
+                                                        <input class="form-check-input" type="radio" name="tlsVersionRadio" id="tlsVersionRadio8" value="sslv3" onclick="generateShCurlCommand()">
                                                         <label class="form-check-label" for="inlineRadio1">SSLv3</label>
                                                     </div>
                                                 </div>
@@ -400,7 +402,7 @@
                                     <h5 class="card-header">
                                         Compiled Curl
                                         <span class="copy-button" id="curl-generated-copy" style="display: none;">
-                                            <a href="#___copy" class="btn btn-secondary" onclick="copyTextToClipboard()"><i class="far fa-copy"></i>&nbsp; <span id="copyButtonText">Copy</span></a>
+                                            <a href="#___copy" class="btn btn-secondary" onclick="copyTextToClipboard('curl-generated', 'copyButtonText')"><i class="far fa-copy"></i>&nbsp; <span id="copyButtonText">Copy</span></a>
                                         </span>
                                     </h5>
                                     <div class="card-body">
@@ -416,18 +418,34 @@
                                 <br />
 
                                 <div class="form-row">
-                                    <div class="col-sm-9">
-                                        <div class="input-group mb-8">
+                                    <div class="col-sm-10">
+                                        <div class="input-group mb-8" id='copy-url-group'>
                                             <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="fas fa-share-square"></i>&nbsp; Share this Curl</div>
+                                                <div class="input-group-text"><i class="fas fa-share-square"></i>&nbsp; Share</div>
                                             </div>
-                                            <div class="form-control" id="share-url" onclick="$('#share-url').text('https://curlit.tk/{{curlit_session_id}}');">Click to generate URL!</div>
+                                            <div class="form-control pointer-cursor" id="share-url" onclick="generateCurlUrl()" style="white-space: nowrap;">{{curlit_session_id}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit Request</a>
+                                    <div class="col-sm-2">
+                                        <a href="#___submit_request" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit</a>
                                     </div>
                                 </div>
+                                
+                                <!-- Response -->
+                                <br id="curl-response-spacer-top" style="display: none;" />
+                                <div id="curl-response" class="card dark-card" style="display: none;">
+                                    <h5 class="card-header">
+                                        Response
+                                    </h5>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-sm-12">
+                                                <pre class="themeless-prism"><code class="language-{{curlit_suggested_language}}">{{curlit_parsed_data}}</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br id="curl-response-spacer-bottom" style="display: none;"/>
                             </div>
                         </div>
                     </form>
@@ -460,7 +478,7 @@
 
                     <!-- Donations -->
                     <div class="card">
-                        <img class="card-img-top" src="./assets/images/donate.png" alt="Donate">
+                        <img class="card-img-top" src="{{>url (L) /assets/images/donate.png}}" alt="Donate">
                         <div class="card-body">
                             <h5 class="card-title">Donate</h5>
                             <p class="card-text">Donations are welcome! All procedes are put towards maintaining the Curl It! servers.</p>
@@ -471,8 +489,6 @@
                     <br />
                 </div>
             </div>
-
-            
         </div>
 
         <!-- Footer -->
@@ -490,14 +506,14 @@
 
         </footer>
         <!-- Footer -->
-
         <br /><br />
 
         <!-- Javascript Imports -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
-        <script type="text/javascript" src="./assets/jquery/js/jquery-3.4.0.js"></script>
-        <script type="text/javascript" src="./assets/bootstrap/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="./assets/js/script.js"></script>
+        <script type="text/javascript" src="{{>url (L) assets/jquery/js/jquery-3.4.0.js}}"></script>
+        <script type="text/javascript" src="{{>url (L) assets/bootstrap/js/bootstrap.min.js}}"></script>
+        <script type="text/javascript" src="{{>url (L) assets/prism/prism.js}}"></script>
+        <script type="text/javascript" src="{{>url (L) assets/js/script.js}}"></script>
         <script>
             // Set up the ACE editor for the "Payload" section.
             var editor = ace.edit("editor");
@@ -510,6 +526,20 @@
             editor.session.on('change', function(delta) {
                 payloadChanged(editor);
             });
+        </script>
+        <script>
+            var in_dev = {{in_dev}};
+            var curlit_session_id = {{curlit_session_id_js}};
+            current_parameters = {{curlit_current_parameters}};
+            current_headers = {{curlit_current_headers}};
+            updateParameterDisplay(true);
+            updateHeaderDisplay(true);
+            var payload = '{{curlit_payload_value_escaped}}';
+            payload = payload.replace(/(?:\r\n|\r|\n)/g, '\\n');
+            current_payload = payload;
+            generateShCurlCommand();
+            {{call_set_url}}
+            url_loaded = {{url_loaded}};
         </script>
     </body>
 </html>

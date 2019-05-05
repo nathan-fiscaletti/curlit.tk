@@ -112,6 +112,94 @@ function generateShCurlCommand()
 }
 
 // #######################################################
+// # Sharing URL Control
+// #######################################################
+
+/**
+ * If set to true, you cannot modify this CURL
+ * nor can you save this CURL. Any new CURL
+ * would generate a new URL.
+ */
+var url_loaded = false;
+
+/**
+ * Sets the URL to be loaded and disables
+ * most of the form.
+ *
+ * @param {string} url 
+ */
+function setGeneratedUrl(url)
+{
+    $("#share-url").text(url);
+    $("#share-url").css('cursor', 'default');
+    $("#copy-url-group").html(
+        $('#copy-url-group').html() +
+        '<div class="input-group-append" id="url-copy-button">' +
+            '<button class="btn btn-secondary" type="button" id="copy-button" onclick="copyTextToClipboard(\'share-url\', \'copyUrlButtonText\')"><i class="far fa-copy"></i>&nbsp; <span id="copyUrlButtonText">Copy</span></button>' +
+            '<a href="'+window.location.href+((in_dev)?"&":"?")+'duplicate" class="btn btn-secondary"><i class="fas fa-clone"></i>&nbsp; Duplicate</a>' +
+        '</div>'
+    );
+
+    // Remove/disable controls
+    $("#curl-address").prop('disabled', true);
+    $("#curl-method").prop('disabled', true);
+    $("#curl-headers-table").css('margin-bottom', '0px');
+    $("#curl-headers-add-form").empty().remove();
+    $("#curl-headers-empty-message-content").text('No headers defined in this request.');
+    $("#curl-headers-empty-message-spacer").remove();
+    $("#curl-parameters-table").css('margin-bottom', '0px');
+    $("#curl-parameters-add-form").empty().remove();
+    $("#curl-parameters-empty-message-content").text('No parameters defined in this request.');
+    $("#curl-parameters-empty-message-spacer").remove();
+    // TODO: Payload (make work like response)
+    $("#curl-basic-auth-username").prop('disabled', true);
+    $("#curl-basic-auth-password").prop('disabled', true);
+    $("#curl-insecure-cb").prop('disabled', true);
+    $("#httpVersionRadio1").prop('disabled', true);
+    $("#httpVersionRadio2").prop('disabled', true);
+    $("#httpVersionRadio3").prop('disabled', true);
+    $("#httpVersionRadio4").prop('disabled', true);
+    $("#httpVersionRadio5").prop('disabled', true);
+    $("#tlsVersionRadio1").prop('disabled', true);
+    $("#tlsVersionRadio2").prop('disabled', true);
+    $("#tlsVersionRadio3").prop('disabled', true);
+    $("#tlsVersionRadio4").prop('disabled', true);
+    $("#tlsVersionRadio5").prop('disabled', true);
+    $("#tlsVersionRadio6").prop('disabled', true);
+    $("#tlsVersionRadio7").prop('disabled', true);
+    $("#tlsVersionRadio8").prop('disabled', true);
+
+    // We do not disable the "Send With" options,
+    // nor are they saved with a request. This is
+    // because the end user should be the deciding
+    // factor in which technology is used to send 
+    // the constructed request.
+
+    url_loaded = true;
+}
+
+/**
+ * Generate a new Curl URL.
+ */
+function generateCurlUrl()
+{
+    if (! url_loaded) {
+        $("#share-url").text('Generating URL...');
+        $.post('{{>url (L) ajax/generateurl}}', {"name":"nathan"})
+        .done(function( data ) {
+            if (data.hasOwnProperty('url')) {
+                setGeneratedUrl(data.url);
+            } else {
+                $("#share-url").html('Something went wrong, <a href="#__generate_url" onclick="generateCurlUrl()">try agin</a>.');
+            }
+        })
+        .fail(function(xhr, status, error){
+            $("#share-url").html('Something went wrong, <a href="#__generate_url" onclick="generateCurlUrl()">try agin</a>.');
+        });
+    }
+}
+
+// #######################################################
 // # Payload Control
 // #######################################################
 
@@ -146,9 +234,10 @@ var current_parameters = [];
  */
 function removeParameter(index)
 {
-    current_parameters.splice(index, 1);
-
-    updateParameterDisplay(false);
+    if (! url_loaded) {
+        current_parameters.splice(index, 1);
+        updateParameterDisplay(false);
+    }
 }
 
 /**
@@ -156,16 +245,18 @@ function removeParameter(index)
  */
 function addParameter()
 {
-    let parameter = $("#curl-add-parameter-name").val();
-    let value  = $("#curl-add-parameter-value").val();
+    if (! url_loaded) {
+        let parameter = $("#curl-add-parameter-name").val();
+        let value  = $("#curl-add-parameter-value").val();
 
-    if (! parameter) {
-        return;
+        if (! parameter) {
+            return;
+        }
+
+        current_parameters.push({"parameter": parameter, "value": value});
+
+        updateParameterDisplay(true);
     }
-
-    current_parameters.push({"parameter": parameter, "value": value});
-
-    updateParameterDisplay(true);
 }
 
 /**
@@ -197,7 +288,12 @@ function updateParameterDisplay(clearInputs)
                 "<tr>" +
                     "<th scope='row'>"+current_parameter.parameter+"</th>" + 
                     "<td><code>"+param_val+"</code></td>" + 
-                    "<td style='width: 1%; white-space: nowrap;'><a href='#___deleteparameter' class='btn btn-danger' onclick='removeParameter("+i+")'><i class='fas fa-trash-alt'></i></a></td>" +
+                    "<td style='width: 1%; white-space: nowrap;'>"+
+                        (
+                            (url_loaded)
+                                ? "<a href='#___deleteparameter' class='btn btn-danger' onclick='removeParameter("+i+")'><i class='fas fa-trash-alt'></i></a>":""
+                        )
+                    +"</td>" +
                 "</tr>"
             );
         }
@@ -228,9 +324,10 @@ var current_headers = [];
  */
 function removeHeader(index)
 {
-    current_headers.splice(index, 1);
-
-    updateHeaderDisplay(false);
+    if (! url_loaded) {
+        current_headers.splice(index, 1);
+        updateHeaderDisplay(false);
+    }
 }
 
 /**
@@ -238,16 +335,18 @@ function removeHeader(index)
  */
 function addHeader()
 {
-    let header = $("#curl-add-header-name").val();
-    let value  = $("#curl-add-header-value").val();
+    if (! url_loaded) {
+        let header = $("#curl-add-header-name").val();
+        let value  = $("#curl-add-header-value").val();
 
-    if (! header || ! value) {
-        return;
+        if (! header || ! value) {
+            return;
+        }
+
+        current_headers.push({"header": header, "value": value});
+
+        updateHeaderDisplay(true);
     }
-
-    current_headers.push({"header": header, "value": value});
-
-    updateHeaderDisplay(true);
 }
 
 /**
@@ -278,7 +377,7 @@ function updateHeaderDisplay(clearInputs)
                 "<tr>" +
                     "<th scope='row'>"+current_header.header+"</th>" + 
                     "<td><code>"+current_header.value+"</code></td>" + 
-                    "<td style='width: 1%; white-space: nowrap;'><a href='#___deleteheader' class='btn btn-danger' onclick='removeHeader("+i+")'><i class='fas fa-trash-alt'></i></a></td>" +
+                    "<td style='width: 1%; white-space: nowrap;'>"+((url_loaded)?"<a href='#___deleteheader' class='btn btn-danger' onclick='removeHeader("+i+")'><i class='fas fa-trash-alt'></i></a>":"")+"</td>" +
                 "</tr>"
             );
         }
@@ -300,7 +399,7 @@ function updateHeaderDisplay(clearInputs)
  * Used to copy text to the clipboard from
  * the curl-generated element.
  */
-function copyTextToClipboard() {
+function copyTextToClipboard(id, control_id) {
     var textArea = document.createElement("textarea");
   
     //
@@ -341,7 +440,7 @@ function copyTextToClipboard() {
     textArea.style.background = 'transparent';
   
   
-    let text = $("#curl-generated").text();
+    let text = $("#"+id).text();
     textArea.value = text;
   
     document.body.appendChild(textArea);
@@ -358,9 +457,9 @@ function copyTextToClipboard() {
   
     document.body.removeChild(textArea);
 
-    $("#copyButtonText").text("Copied!");
+    $("#"+control_id).text("Copied!");
 
     setTimeout(function() {
-        $("#copyButtonText").text("Copy");
+        $("#"+control_id).text("Copy");
     }, 2000);
   }

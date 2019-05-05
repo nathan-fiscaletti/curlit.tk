@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "CurlIt\\": "src/CurlIt"
-        }
+        },
+        "files": [
+            "src/CurlIt/Functions/TemplateParsing.php"
+        ]
     },
     "authors": [
         {

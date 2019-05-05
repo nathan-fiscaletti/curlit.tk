@@ -45,6 +45,13 @@
     background-color: #202020;
 }
 
+.themeless-prism {
+    border: none !important;
+    background: #202020 !important;
+    box-shadow: none !important;
+    padding: 0px !important;
+}
+
 #editor { 
     position: absolute;
     top: 0;
