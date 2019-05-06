@@ -5,6 +5,15 @@ include '../vendor/autoload.php';
 use \CurlIt\Content\Page;
 use \CurlIt\Content\PageController;
 
+use MySqliWrapper\DataBase;
+
+// Load Databases
+$config = include '../config/web.php';
+foreach ($config['databases'] as $database) {
+    Database::register($database);
+}
+
+
 // Create the PageController using the
 // route property from the .htaccess file.
 $pageController = new PageController(
@@ -30,6 +39,11 @@ $pageController
     new \CurlIt\Content\Pages\GenerateURL()
 )
 
+->AddPage(
+    'ajax/submitrequest',
+    new \CurlIt\Content\Pages\SubmitRequest()
+)
+
 // Override the script.js route so that it
 // is parsed as a template.
 ->addPage(
@@ -42,7 +56,7 @@ $pageController
 
         public function getParameter($key)
         {
-            /* Not implemented */
+            /* Not Implemented */
         }
     }
 )

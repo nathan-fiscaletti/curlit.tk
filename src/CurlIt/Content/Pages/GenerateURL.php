@@ -25,12 +25,26 @@ class GenerateURL extends Block
      */
     public function getContent($data)
     {
-        header('Content-Type: application/json');
-        return json_encode(["url" => Url::generateUrl(Curl::curlIdToUrlId(998123))]);
+        $curl = new Curl;
 
-        //$curl = new Curl();
-        //foreach ($data as $paramater => $data_item) {
-        //    $curl->{$parameter} = $data_item;
-        //}
+        $curl->address = $data['address'];
+        $curl->method = $data['method'];
+        $curl->payload = $data['payload'];
+        $curl->http_user = $data['http_auth']['user'];
+        $curl->http_password = $data['http_auth']['pass'];
+        $curl->insecure = $data['insecure'] ? 1 : 0;
+        $curl->parameters = json_encode($data['parameters']);
+        $curl->headers = json_encode($data['headers']);
+
+        header('Content-Type: application/json');
+        try {
+            if ($curl->save()) {
+                return json_encode(["url" => Url::generateUrl(Curl::curlIdToUrlId($curl->id))]);
+            } else {
+                return json_encode(["error" => 'Failed to create a custom URL. Maybe some required fields are missing?']);
+            }
+        } catch (\Exception $e) {
+            return json_encode(["error" => 'Failed to create a custom URL. Maybe some required fields are missing?']);
+        }
     }
 }

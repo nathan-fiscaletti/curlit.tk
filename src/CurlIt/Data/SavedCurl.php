@@ -12,7 +12,7 @@ class SavedCurl extends Model
      * 
      * @var string
      */
-    protected $connection = 'main';
+    protected $connection = 'curlit';
 
     /**
      * The table for the Model.
@@ -59,8 +59,7 @@ class SavedCurl extends Model
     public static function load($urlId)
     {
         $id = self::urlIdToCurlId($urlId);
-
-        return self::select()->where('id', '=', $id)->get();
+        return self::select()->where('id', '=', $id)->first();
     }
 
     /**
@@ -82,8 +81,8 @@ class SavedCurl extends Model
      * 
      * @return int
      */
-    public static function urlIdtoCurlId($urlId)
+    public static function urlIdToCurlId($urlId)
     {
-        return (new Base(19))->toBase10($urlId);
+        return (new Base(19))->toBase10(strtoupper($urlId));
     }
 }

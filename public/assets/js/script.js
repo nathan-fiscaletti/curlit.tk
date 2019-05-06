@@ -9,6 +9,114 @@
 let curl_command = {};
 
 /**
+ * Submit the constructed CURL request.
+ */
+function submitRequest()
+{
+    $("#curl-submit-button").prop('enabled', false);
+    $("#submit-button-text").text("Loading...");
+    let ajaxRequest = {
+        headers: headersAsAjaxHeaders(),
+        data: curl_command.payload,
+        method: curl_command.method,
+        dataType: 'text',
+        crossDomain: true,
+        timeout: 15000
+    };
+
+    if (curl_command.hasOwnProperty('http_auth') && curl_command.http_auth.user != null) {
+        ajaxRequest["beforeSend"] = function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa(curl_command.http_auth.user + ":" + curl_command.http_auth.pass));
+        };
+    }
+    
+    $.ajax(curl_command.address + generateParamStr(), ajaxRequest)
+     .done(function(data, textStatus, request) {
+        displayResult(data, textStatus, request);
+        $("#curl-submit-button").prop('enabled', true);
+        $("#submit-button-text").text("Submit");
+     })
+     .fail(function (xhr, status, error) {
+         displayResult('Error: ' + error + ', Code: ' + xhr.status + ' ' + status + ', Response: ' + xhr.responseText, status, xhr);
+         $("#curl-submit-button").prop('enabled', true);
+         $("#submit-button-text").text("Submit");
+     });
+}
+
+/**
+ * Display the result box.
+ *
+ * @param {mixed} result 
+ */
+function displayResult(result, textStatus, request)
+{
+    $("#curl-response-spacer-top").css('display', 'block');
+    $("#curl-response").css('display', 'block');
+
+    let data = result;
+    try {
+        data = JSON.parse(data);
+        data = JSON.stringify(data, null, 4);
+    } catch (e) {}
+
+    let out = request.status + ' ' + textStatus + "\r\n\r\n";
+
+    if (request != null) {
+        out += request.getAllResponseHeaders();
+        out += "\r\n";
+    }
+
+    out += data;
+
+    //data = data.replace(/(?:\r\n|\r|\n)/g, '\\n');
+    response_editor.setValue(out, -1);
+}
+
+/**
+ * Convert the headers to AJAX formatted headers.
+ */
+function headersAsAjaxHeaders()
+{
+    let ajax_headers = {};
+    let i;
+    for (i = 0; i< curl_command.headers.length; i++) {
+        let current_header = curl_command.headers[i];
+        ajax_headers[current_header.header] = current_header.value;
+    }
+
+    return ajax_headers;
+}
+
+/**
+ * Generate the Parameter String
+ */
+function generateParamStr()
+{
+    let address = $("#curl-address").val();
+    
+    let paramStr = "";
+    curl_command.parameters = current_parameters;
+    let i;
+    for (i = 0; i < current_parameters.length; ++i) {
+        let current_parameter = current_parameters[i];
+
+        if (paramStr == "" && address.indexOf("?") == -1) {
+            paramStr += "?";
+        } else {
+            paramStr += "&";
+        }
+        paramStr += current_parameter.parameter;
+
+        if (current_parameter.value) {
+            paramStr += "="+current_parameter.value;
+        }
+    }
+
+    return paramStr;
+}
+
+/**
  * Update the Generated Curl command based
  * on the selections made on the form.
  */
@@ -35,7 +143,7 @@ function generateShCurlCommand()
     // Generate Headers
     curl_command.headers = current_headers;
     let headerStr = "";
-    var i;
+    let i;
     for (i = 0; i < current_headers.length; ++i) {
         let current_header = current_headers[i];
 
@@ -45,22 +153,7 @@ function generateShCurlCommand()
     }
 
     // Generate parameters
-    let paramStr = "";
-    curl_command.parameters = current_parameters;
-    for (i = 0; i < current_parameters.length; ++i) {
-        let current_parameter = current_parameters[i];
-
-        if (paramStr == "" && address.indexOf("?") == -1) {
-            paramStr += "?";
-        } else {
-            paramStr += "&";
-        }
-        paramStr += current_parameter.parameter;
-
-        if (current_parameter.value) {
-            paramStr += "="+current_parameter.value;
-        }
-    }
+    let paramStr = generateParamStr();
 
     // Generate payload
     let payloadStr = "";
@@ -82,7 +175,7 @@ function generateShCurlCommand()
     }
 
     // Generate "insecure"
-    let insecure = $("#curl-insecure-cb").prop('checked');
+    let insecure = $("#curl-insecure-cb").checked;
     let insecureStr = (insecure) ? "-k " : "";
     curl_command.insecure = insecure;
 
@@ -116,13 +209,6 @@ function generateShCurlCommand()
 // #######################################################
 
 /**
- * If set to true, you cannot modify this CURL
- * nor can you save this CURL. Any new CURL
- * would generate a new URL.
- */
-var url_loaded = false;
-
-/**
  * Sets the URL to be loaded and disables
  * most of the form.
  *
@@ -135,8 +221,8 @@ function setGeneratedUrl(url)
     $("#copy-url-group").html(
         $('#copy-url-group').html() +
         '<div class="input-group-append" id="url-copy-button">' +
-            '<button class="btn btn-secondary" type="button" id="copy-button" onclick="copyTextToClipboard(\'share-url\', \'copyUrlButtonText\')"><i class="far fa-copy"></i>&nbsp; <span id="copyUrlButtonText">Copy</span></button>' +
-            '<a href="'+window.location.href+((in_dev)?"&":"?")+'duplicate" class="btn btn-secondary"><i class="fas fa-clone"></i>&nbsp; Duplicate</a>' +
+            '<button class="btn btn-secondary" type="button" id="copy-button" onclick="copyTextToClipboard(\'share-url\', \'copyUrlButtonText\')" data-toggle="tooltip" data-placement="top" title="Copy URL"><i class="far fa-copy"></i>&nbsp; <span id="copyUrlButtonText">Copy</span></button>' +
+            '<a href="'+url+((in_dev)?"&":"?")+'duplicate" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Duplicate & Edit"><i class="fas fa-clone"></i>&nbsp; Duplicate</a>' +
         '</div>'
     );
 
@@ -176,6 +262,12 @@ function setGeneratedUrl(url)
     // the constructed request.
 
     url_loaded = true;
+
+    // Update header / parameter display.
+    updateParameterDisplay(true);
+    updateHeaderDisplay(true);
+
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 /**
@@ -185,11 +277,14 @@ function generateCurlUrl()
 {
     if (! url_loaded) {
         $("#share-url").text('Generating URL...');
-        $.post('{{>url (L) ajax/generateurl}}', {"name":"nathan"})
+        $.post('{{>url (L) ajax/generateurl}}', curl_command)
         .done(function( data ) {
             if (data.hasOwnProperty('url')) {
                 setGeneratedUrl(data.url);
             } else {
+                if (data.hasOwnProperty('error')) {
+                    alert(data.error);
+                }
                 $("#share-url").html('Something went wrong, <a href="#__generate_url" onclick="generateCurlUrl()">try agin</a>.');
             }
         })
@@ -221,11 +316,6 @@ function payloadChanged(editor)
 // #######################################################
 // # Parameter Control
 // #######################################################
-
-/**
- * Local Parameter storage
- */
-var current_parameters = [];
 
 /**
  * Removes a specific parameter at an index.
@@ -275,10 +365,10 @@ function updateParameterDisplay(clearInputs)
         $("#curl-parameters-empty-message-spacer").css("display", "none");
         $("#curl-parameters-table").css("display", "block");
 
-        var curl_parameters = $("#curl-parameters");
+        let curl_parameters = $("#curl-parameters");
         curl_parameters.empty();
 
-        var i;
+        let i;
         for (i = 0; i < current_parameters.length; ++i) {
             let current_parameter = current_parameters[i];
             let param_val = !current_parameter.value ? '(null)' : current_parameter.value;
@@ -290,12 +380,14 @@ function updateParameterDisplay(clearInputs)
                     "<td><code>"+param_val+"</code></td>" + 
                     "<td style='width: 1%; white-space: nowrap;'>"+
                         (
-                            (url_loaded)
-                                ? "<a href='#___deleteparameter' class='btn btn-danger' onclick='removeParameter("+i+")'><i class='fas fa-trash-alt'></i></a>":""
+                            (!url_loaded)
+                                ? "<a href='#___deleteparameter' class='btn btn-danger' onclick='removeParameter("+i+")' data-toggle='tooltip' data-placement='top' title='Remove Parameter'><i class='fas fa-trash-alt'></i></a>":""
                         )
                     +"</td>" +
                 "</tr>"
             );
+
+            $('[data-toggle="tooltip"]').tooltip();
         }
     }
 
@@ -311,11 +403,6 @@ function updateParameterDisplay(clearInputs)
 // #######################################################
 // # Header Control
 // #######################################################
-
-/**
- * Local Header storage
- */
-var current_headers = [];
 
 /**
  * Removes a specific header at an index.
@@ -365,10 +452,10 @@ function updateHeaderDisplay(clearInputs)
         $("#curl-headers-empty-message-spacer").css("display", "none");
         $("#curl-headers-table").css("display", "block");
 
-        var curl_headers = $("#curl-headers");
+        let curl_headers = $("#curl-headers");
         curl_headers.empty();
 
-        var i;
+        let i;
         for (i = 0; i < current_headers.length; ++i) {
             let current_header = current_headers[i];
 
@@ -377,10 +464,12 @@ function updateHeaderDisplay(clearInputs)
                 "<tr>" +
                     "<th scope='row'>"+current_header.header+"</th>" + 
                     "<td><code>"+current_header.value+"</code></td>" + 
-                    "<td style='width: 1%; white-space: nowrap;'>"+((url_loaded)?"<a href='#___deleteheader' class='btn btn-danger' onclick='removeHeader("+i+")'><i class='fas fa-trash-alt'></i></a>":"")+"</td>" +
+                    "<td style='width: 1%; white-space: nowrap;'>"+((!url_loaded)?"<a href='#___deleteheader' class='btn btn-danger' onclick='removeHeader("+i+")' data-toggle='tooltip' data-placement='top' title='Remove Header'><i class='fas fa-trash-alt'></i></a>":"")+"</td>" +
                 "</tr>"
             );
         }
+
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     if (clearInputs) {
@@ -400,7 +489,7 @@ function updateHeaderDisplay(clearInputs)
  * the curl-generated element.
  */
 function copyTextToClipboard(id, control_id) {
-    var textArea = document.createElement("textarea");
+    let textArea = document.createElement("textarea");
   
     //
     // *** This styling is an extra step which is likely not required. ***
@@ -448,8 +537,8 @@ function copyTextToClipboard(id, control_id) {
     textArea.select();
   
     try {
-      var successful = document.execCommand('copy');
-      var msg = successful ? 'successful' : 'unsuccessful';
+      let successful = document.execCommand('copy');
+      let msg = successful ? 'successful' : 'unsuccessful';
       console.log('Copying text command was ' + msg);
     } catch (err) {
       console.log('Oops, unable to copy');

@@ -78,7 +78,7 @@ class Base
     {
         $this->setLibrary(
             array_merge(
-                range(0, 9),
+                explode(' ', '0 1 2 3 4 5 6 7 8 9'),
                 range('a', 'z')
             )
         );
@@ -134,14 +134,16 @@ class Base
         $pieces = array_slice($pieces, 1, count($pieces) - 1);
         $pieces = array_reverse($pieces);
         $compiled = [];
+
         foreach ($pieces as $placement => $digit) {
             $digit = strtolower($digit);
             $compiled[] = (
                 array_key_exists($placement, $this->library)
-                    ? array_search($digit, $this->library[$placement])
-                    : array_search($digit, $this->library[-1        ])
+                    ? array_search($digit, $this->library[$placement], true)
+                    : array_search($digit, $this->library[-1        ], true)
             );
         }
+
         $result = 0;
         foreach ($compiled as $placement => $index)
         {

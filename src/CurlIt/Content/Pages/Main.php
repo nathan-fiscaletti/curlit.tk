@@ -44,22 +44,11 @@ class Main extends Page
     public function prepare($path)
     {
         if (! empty($path) && strpos($path, '/') === false) {
-            $this->localCurl = (object)[
-                'id' => 99876334223411,
-                'address' => 'https://test.api/test',
-                'method'  => 'POST',
-                'payload' => "{\n    \"name\":\"nathan\"\n}",
-                'http_user' => 'nathan',
-                'http_pass' => 'asdfasdf',
-                'insecure' => true,
-                'parameters' => '[{"parameter":"id", "value":3}]',
-                'headers' => '[{"header":"Content-Type", "value":"application/json"}]',
-            ];
+            $this->localCurl = Curl::load($path);
 
             if (isset($_GET['duplicate'])) {
                 $this->duplicate = true;
             }
-            // $this->localCurl = Curl::load($path);
         }
     }
 
@@ -89,7 +78,7 @@ class Main extends Page
         } 
         
         else if ($key == 'curlit_basic_http_pass') {
-            return (!is_null($this->localCurl)) ? $this->localCurl->http_pass : '';
+            return (!is_null($this->localCurl)) ? $this->localCurl->http_password : '';
         } 
         
         else if ($key == 'curlit_inseucre_checked') {
@@ -129,7 +118,7 @@ class Main extends Page
         } 
         
         else if ($key == 'curlit_current_parameters') {
-            if (is_null($this->localCurl)) {
+            if (is_null($this->localCurl) || ($this->localCurl->parameters == null || $this->localCurl->parameters == 'null')) {
                 return '[]';
             }
 
@@ -137,11 +126,11 @@ class Main extends Page
         } 
         
         else if ($key == 'curlit_current_headers') {
-            if (is_null($this->localCurl)) {
+            if (is_null($this->localCurl) || ($this->localCurl->headers == null || $this->localCurl->headers == 'null')) {
                 return '[]';
             }
 
-            return $this->localCurl->headers;
+            return stripslashes($this->localCurl->headers);
         }
 
         else if ($key == 'in_dev') {

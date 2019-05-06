@@ -111,7 +111,7 @@
                                                             <input type="text" class="form-control" placeholder="Value..." id="curl-add-header-value" />
                                                         </div>
                                                         <div class="col-sm-2">
-                                                            <a href="#___addheader" class="btn btn-info float-right full-w-button" onclick="addHeader();"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
+                                                            <a href="#___addheader" class="btn btn-info float-right full-w-button" onclick="addHeader();" data-toggle="tooltip" data-placement="top" title="Add Header"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -164,7 +164,7 @@
                                                             <input type="text" class="form-control" placeholder="Value..." id="curl-add-parameter-value" />
                                                         </div>
                                                         <div class="col-sm-2">
-                                                            <a href="#___addparameter" class="btn btn-info float-right full-w-button" onclick="addParameter();"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
+                                                            <a href="#___addparameter" class="btn btn-info float-right full-w-button" onclick="addParameter();" data-toggle="tooltip" data-placement="top" title="Add Parameter"><i class="fas fa-plus-circle"></i>&nbsp; Add</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -186,7 +186,7 @@
                                         <div class="card-body" style="height: 225px;">
                                             <div class="form-row">
                                                 <div class="col-sm-12">
-                                                    <div id="editor" style="background-color: #202020 !important;">{{curlit_payload_value}}</div>
+                                                    <div id="editor" style="background-color: #202020 !important;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -218,7 +218,7 @@
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text"><i class="fas fa-lock"></i></div>
                                                         </div>
-                                                        <input type="password" class="form-control" id="curl-basic-auth-password" value="{{curlit_basic_http_password}}" placeholder="Password..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
+                                                        <input type="password" class="form-control" id="curl-basic-auth-password" value="{{curlit_basic_http_pass}}" placeholder="Password..." onchange="generateShCurlCommand();" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -248,7 +248,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <!-- Other option -->
+                                                    <i style="color: gray;"><code>-k</code> Will not work when sending with JavaScript.</i>
                                                 </div>
                                             </div>
                                             <br />
@@ -400,7 +400,7 @@
                                 <!-- Compiled Curl -->
                                 <div class="card dark-card">
                                     <h5 class="card-header">
-                                        Compiled Curl
+                                        Compiled CURL
                                         <span class="copy-button" id="curl-generated-copy" style="display: none;">
                                             <a href="#___copy" class="btn btn-secondary" onclick="copyTextToClipboard('curl-generated', 'copyButtonText')"><i class="far fa-copy"></i>&nbsp; <span id="copyButtonText">Copy</span></a>
                                         </span>
@@ -408,7 +408,7 @@
                                     <div class="card-body">
                                         <div class="card" id="curl-generated-empty" style="display: block;">
                                             <h5 class="card-body" style="margin: 0px;">
-                                                Provide an address to begin generating the compiled Curl command.
+                                                Provide an address to begin generating the compiled CURL command.
                                             </h5>
                                         </div>
                                         <pre id="curl-generated-wrapper" style="display: none;margin-bottom: 0px;"><code id="curl-generated"></code></pre>
@@ -418,16 +418,17 @@
                                 <br />
 
                                 <div class="form-row">
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-8">
                                         <div class="input-group mb-8" id='copy-url-group'>
                                             <div class="input-group-prepend">
-                                                <div class="input-group-text"><i class="fas fa-share-square"></i>&nbsp; Share</div>
+                                                <div class="input-group-text pointer-cursor" onclick="generateCurlUrl()"><i class="fas fa-share-square"></i></div>
                                             </div>
                                             <div class="form-control pointer-cursor" id="share-url" onclick="generateCurlUrl()" style="white-space: nowrap;">{{curlit_session_id}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <a href="#___submit_request" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Submit</a>
+                                    <div class="col-sm-4">
+                                        <a href="#___submit_request" class="btn btn-primary float-right" onclick="submitRequest()" data-toggle="tooltip" data-placement="top" title="Submit Request" id="curl-submit-button"><i class="fas fa-paper-plane"></i>&nbsp; <span id="submit-button-text">Submit</span></a>
+                                        <a href="./" class="btn btn-secondary float-right" style="margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Create a new Curl It!"><i class="fas fa-plus-circle"></i>&nbsp; New</a>
                                     </div>
                                 </div>
                                 
@@ -438,14 +439,13 @@
                                         Response
                                     </h5>
                                     <div class="card-body">
-                                        <div class="form-row">
+                                        <div class="form-row" style="height: 225px;">
                                             <div class="col-sm-12">
-                                                <pre class="themeless-prism"><code class="language-{{curlit_suggested_language}}">{{curlit_parsed_data}}</code></pre>
+                                                <div id="response-editor" style="background-color: #202020 !important;"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <br id="curl-response-spacer-bottom" style="display: none;"/>
                             </div>
                         </div>
                     </form>
@@ -478,7 +478,7 @@
 
                     <!-- Donations -->
                     <div class="card">
-                        <img class="card-img-top" src="{{>url (L) /assets/images/donate.png}}" alt="Donate">
+                        <img class="card-img-top" src="{{>url (L) assets/images/donate.png}}" alt="Donate">
                         <div class="card-body">
                             <h5 class="card-title">Donate</h5>
                             <p class="card-text">Donations are welcome! All procedes are put towards maintaining the Curl It! servers.</p>
@@ -511,8 +511,50 @@
         <!-- Javascript Imports -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
         <script type="text/javascript" src="{{>url (L) assets/jquery/js/jquery-3.4.0.js}}"></script>
+        <script type="text/javascript" src="{{>url (L) assets/popper/popper.min.js}}"></script>
         <script type="text/javascript" src="{{>url (L) assets/bootstrap/js/bootstrap.min.js}}"></script>
         <script type="text/javascript" src="{{>url (L) assets/prism/prism.js}}"></script>
+        <script>
+            var in_dev = {{in_dev}};
+            var curlit_session_id = {{curlit_session_id_js}};
+
+            var is_duplicate = false{{curlit_is_duplicate}};
+            
+            var payload = '{{curlit_payload_value_escaped}}';
+
+            /**
+             * Local Header storage
+             */
+            var current_headers = {{curlit_current_headers}};
+
+            /**
+             * Local Parameter storage
+             */
+            var current_parameters = {{curlit_current_parameters}};
+            
+            /**
+             * If set to true, you cannot modify this CURL
+             * nor can you save this CURL. Any new CURL
+             * would generate a new URL.
+             */
+            var url_loaded = {{url_loaded}};
+
+            var response_editor = ace.edit("response-editor");
+            response_editor.setTheme("ace/theme/chaos");
+            response_editor.session.setMode('ace/mode/javascript');
+            response_editor.setShowPrintMargin(false);
+            response_editor.renderer.setShowGutter(false);
+            $(".ace_gutter").css("background", "#202020");
+            response_editor.setOptions({
+                readOnly: true,
+                highlightActiveLine: false,
+                highlightGutterLine: false,
+            });
+            response_editor.commands.commmandKeyBinding={};
+            response_editor.renderer.$cursorLayer.element.style.opacity=0;
+            response_editor.textInput.getElement().disabled=true;
+            response_editor.session.setNewLineMode("unix");
+        </script>
         <script type="text/javascript" src="{{>url (L) assets/js/script.js}}"></script>
         <script>
             // Set up the ACE editor for the "Payload" section.
@@ -526,20 +568,34 @@
             editor.session.on('change', function(delta) {
                 payloadChanged(editor);
             });
-        </script>
-        <script>
-            var in_dev = {{in_dev}};
-            var curlit_session_id = {{curlit_session_id_js}};
-            current_parameters = {{curlit_current_parameters}};
-            current_headers = {{curlit_current_headers}};
+
+            editor.session.setNewLineMode("unix");
+
+            // Update parameter / header dispays
             updateParameterDisplay(true);
             updateHeaderDisplay(true);
-            var payload = '{{curlit_payload_value_escaped}}';
-            payload = payload.replace(/(?:\r\n|\r|\n)/g, '\\n');
-            current_payload = payload;
+
+            editor.setValue(payload, -1);
             generateShCurlCommand();
             {{call_set_url}}
-            url_loaded = {{url_loaded}};
+            if (url_loaded) {
+                editor.setOptions({
+                    readOnly: true,
+                    highlightActiveLine: false,
+                    highlightGutterLine: false
+                });
+                editor.commands.commmandKeyBinding={};
+                editor.renderer.$cursorLayer.element.style.opacity=0;
+                editor.textInput.getElement().disabled=true;
+            } else {
+                editor.setOptions({
+                    highlightActiveLine: false,
+                    highlightGutterLine: false
+                });
+            }
+
+            // Enable Tooltips
+            $('[data-toggle="tooltip"]').tooltip();
         </script>
     </body>
 </html>
