@@ -30,6 +30,11 @@ function submitRequest()
             $("#submit-button-text").text("Submit");
         });
     } else if (executeUsing == 'js') {
+        if (curl_command.address.indexOf('https') == -1) {
+            alert("When using 'Run as JavaScript', you can only send request to HTTPS hosts due to Mixed Content Policies.");
+            return;
+        }
+
         let ajaxRequest = {
             headers: headersAsAjaxHeaders(),
             data: curl_command.payload,
