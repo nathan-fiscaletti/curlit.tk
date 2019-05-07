@@ -15,33 +15,49 @@ function submitRequest()
 {
     $("#curl-submit-button").prop('enabled', false);
     $("#submit-button-text").text("Loading...");
-    let ajaxRequest = {
-        headers: headersAsAjaxHeaders(),
-        data: curl_command.payload,
-        method: curl_command.method,
-        dataType: 'text',
-        crossDomain: true,
-        timeout: 15000
-    };
 
-    if (curl_command.hasOwnProperty('http_auth') && curl_command.http_auth.user != null) {
-        ajaxRequest["beforeSend"] = function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader ("Authorization", "Basic " + btoa(curl_command.http_auth.user + ":" + curl_command.http_auth.pass));
+    let executeUsing = $("input[name=executeUsing]:checked").val();
+    if (executeUsing == 'php') {
+        $.post('{{>url (L) ajax/submitrequest}}', curl_command)
+        .done(function( data, textStatus, request ) {
+            displayResult(data, textStatus, request, false);
+            $("#curl-submit-button").prop('enabled', true);
+            $("#submit-button-text").text("Submit");
+        })
+        .fail(function(xhr, status, error){
+            displayResult('Error: ' + error + ', Code: ' + xhr.status + ' ' + status + ', Response: ' + xhr.responseText, status, xhr, true);
+            $("#curl-submit-button").prop('enabled', true);
+            $("#submit-button-text").text("Submit");
+        });
+    } else if (executeUsing == 'js') {
+        let ajaxRequest = {
+            headers: headersAsAjaxHeaders(),
+            data: curl_command.payload,
+            method: curl_command.method,
+            dataType: 'text',
+            crossDomain: true,
+            timeout: 15000
         };
+
+        if (curl_command.hasOwnProperty('http_auth') && curl_command.http_auth.user != null) {
+            ajaxRequest["beforeSend"] = function (xhr) {
+                xhr.withCredentials = true;
+                xhr.setRequestHeader ("Authorization", "Basic " + btoa(curl_command.http_auth.user + ":" + curl_command.http_auth.pass));
+            };
+        }
+        
+        $.ajax(curl_command.address + generateParamStr(), ajaxRequest)
+         .done(function(data, textStatus, request) {
+             displayResult(data, textStatus, request, true);
+             $("#curl-submit-button").prop('enabled', true);
+             $("#submit-button-text").text("Submit");
+         })
+         .fail(function (xhr, status, error) {
+             displayResult('Error: ' + error + ', Code: ' + xhr.status + ' ' + status + ', Response: ' + xhr.responseText, status, xhr, true);
+             $("#curl-submit-button").prop('enabled', true);
+             $("#submit-button-text").text("Submit");
+         });
     }
-    
-    $.ajax(curl_command.address + generateParamStr(), ajaxRequest)
-     .done(function(data, textStatus, request) {
-        displayResult(data, textStatus, request);
-        $("#curl-submit-button").prop('enabled', true);
-        $("#submit-button-text").text("Submit");
-     })
-     .fail(function (xhr, status, error) {
-         displayResult('Error: ' + error + ', Code: ' + xhr.status + ' ' + status + ', Response: ' + xhr.responseText, status, xhr);
-         $("#curl-submit-button").prop('enabled', true);
-         $("#submit-button-text").text("Submit");
-     });
 }
 
 /**
@@ -49,7 +65,7 @@ function submitRequest()
  *
  * @param {mixed} result 
  */
-function displayResult(result, textStatus, request)
+function displayResult(result, textStatus, request, showAjaxResponseData)
 {
     $("#curl-response-spacer-top").css('display', 'block');
     $("#curl-response").css('display', 'block');
@@ -60,11 +76,15 @@ function displayResult(result, textStatus, request)
         data = JSON.stringify(data, null, 4);
     } catch (e) {}
 
-    let out = request.status + ' ' + textStatus + "\r\n\r\n";
+    let out = '';
 
-    if (request != null) {
-        out += request.getAllResponseHeaders();
-        out += "\r\n";
+    if (showAjaxResponseData) {
+        out = request.status + ' ' + textStatus + "\r\n\r\n";
+
+        if (request != null) {
+            out += request.getAllResponseHeaders();
+            out += "\r\n";
+        }
     }
 
     out += data;
@@ -79,10 +99,13 @@ function displayResult(result, textStatus, request)
 function headersAsAjaxHeaders()
 {
     let ajax_headers = {};
-    let i;
-    for (i = 0; i< curl_command.headers.length; i++) {
-        let current_header = curl_command.headers[i];
-        ajax_headers[current_header.header] = current_header.value;
+
+    if (curl_command != null) {
+        let i;
+        for (i = 0; i< curl_command.headers.length; i++) {
+            let current_header = curl_command.headers[i];
+            ajax_headers[current_header.header] = current_header.value;
+        }
     }
 
     return ajax_headers;
@@ -175,25 +198,29 @@ function generateShCurlCommand()
     }
 
     // Generate "insecure"
-    let insecure = $("#curl-insecure-cb").checked;
+    let insecure = $("#curl-insecure-cb").prop('checked');
     let insecureStr = (insecure) ? "-k " : "";
     curl_command.insecure = insecure;
 
     // Generate HTTP Version
-    let http = $("#httpVersionRadio1:checked").val();
     let httpStr = "";
+    /*
+    let http = $("#httpVersionRadio1:checked").val();
     curl_command.http_version = http;
     if (http) {
         httpStr = "--http" + http + " ";
     }
+    */
 
     // Generate TLS Version
-    let tls = $("#tlsVersionRadio1:checked").val();
     let tlsStr = "";
+    /*
+    let tls = $("#tlsVersionRadio1:checked").val();
     curl_command.tls_version = tls;
     if (tls) {
         tlsStr = "--" + tls + " ";
     }
+    */
 
     // Set the final CURL Command
     $("#curl-generated").text(
@@ -241,6 +268,7 @@ function setGeneratedUrl(url)
     $("#curl-basic-auth-username").prop('disabled', true);
     $("#curl-basic-auth-password").prop('disabled', true);
     $("#curl-insecure-cb").prop('disabled', true);
+    /*
     $("#httpVersionRadio1").prop('disabled', true);
     $("#httpVersionRadio2").prop('disabled', true);
     $("#httpVersionRadio3").prop('disabled', true);
@@ -254,6 +282,7 @@ function setGeneratedUrl(url)
     $("#tlsVersionRadio6").prop('disabled', true);
     $("#tlsVersionRadio7").prop('disabled', true);
     $("#tlsVersionRadio8").prop('disabled', true);
+    */
 
     // We do not disable the "Send With" options,
     // nor are they saved with a request. This is

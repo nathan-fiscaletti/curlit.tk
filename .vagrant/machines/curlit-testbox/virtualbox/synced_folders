@@ -1,1 +1,0 @@
-{"virtualbox":{"/var/www/html":{"create":true,"group":"www-data","owner":"www-data","guestpath":"/var/www/html","hostpath":"/Volumes/ExternalDrive/git-repos/personal/curlit.tk","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Volumes/ExternalDrive/git-repos/personal/curlit.tk","disabled":false,"__vagrantfile":true}}}

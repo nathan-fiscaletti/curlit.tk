@@ -7,7 +7,7 @@ return [
      * This is used by the templating system
      * to generate URL's to resources and pages.
      */
-    'proto' => 'http',
+    'proto' => 'https',
 
     /**
      * The address to your site.
@@ -15,7 +15,7 @@ return [
      * This is used by the templating system
      * to generate URL's to resources and pages.
      */
-    'site' => '192.168.0.126',
+    'site' => 'curlit.tk',
 
     /**
      * Development / Production Toggle

@@ -33,12 +33,13 @@ $pageController
     new \CurlIt\Content\Pages\Contact()
 )
 
-// Load AJAX Handlers
+// AJAX Handler for Generating URLs
 ->addPage(
     'ajax/generateurl',
     new \CurlIt\Content\Pages\GenerateURL()
 )
 
+// AJAX Handler for Submitting Requests using PHP
 ->AddPage(
     'ajax/submitrequest',
     new \CurlIt\Content\Pages\SubmitRequest()

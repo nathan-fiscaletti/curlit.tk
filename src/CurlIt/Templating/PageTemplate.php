@@ -25,7 +25,7 @@ abstract class PageTemplate extends FileTemplate
     {
         $this->page = $page;
 
-        if (! file_Exists('../resources/Templates/'.$this->page.'.html')) {
+        if (! file_Exists('../resources/templates/'.$this->page.'.html')) {
             throw new \Exception('Missing template file: '.$this->page.'.html');
         }
 

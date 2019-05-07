@@ -252,6 +252,7 @@
                                                 </div>
                                             </div>
                                             <br />
+                                            <!--
                                             <div class="form-row">
                                                 <div class="col-sm-4">
                                                     <label><b>HTTP Version: </b></label>
@@ -299,10 +300,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <!-- No option -->
+                                                    
                                                 </div>
                                             </div>
                                             <br />
+                                            
                                             <div class="form-row">
                                                 <div class="col-sm-4">
                                                     <label><b>TLS/SSL Version: </b></label>
@@ -375,19 +377,20 @@
                                                 </div>
                                             </div>
                                             <br />
+                                            -->
                                             <div class="form-row">
                                                 <div class="col-sm-4">
                                                     <label><b>Execute Using: </b></label>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                                                        <input class="form-check-input" type="radio" name="executeUsing" id="executeUsingPHP" value="php" checked>
                                                         <label class="form-check-label" for="inlineRadio1">PHP (Server Side)</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                        <input class="form-check-input" type="radio" name="executeUsing" id="executeUsingJavascript" value="js">
                                                         <label class="form-check-label" for="inlineRadio2">JavaScript (Locally) <span class="badge badge-secondary">New</span></label>
                                                     </div>
                                                 </div>
@@ -454,6 +457,16 @@
                 <div class="col-sm-4">
                     <br />
 
+                    <!-- Info -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Note</h5>
+                            <p class="card-text">To use this tool the endpoint your are pointing to must have the <code>CORS</code> header configured properly. See <a href="https://enable-cors.org/server_apache.html" target="_blank">this link</a> for more information.</a></p>
+                        </div>
+                    </div>
+    
+                    <br />
+
                     <!-- Share -->
                     <div class="card">
                         <div class="card-body">
@@ -478,14 +491,24 @@
 
                     <!-- Donations -->
                     <div class="card">
-                        <img class="card-img-top" src="{{>url (L) assets/images/donate.png}}" alt="Donate">
+                        <!--<img class="card-img-top" src="{{>url (L) assets/images/donate.png}}" alt="Donate">-->
                         <div class="card-body">
                             <h5 class="card-title">Donate</h5>
                             <p class="card-text">Donations are welcome! All procedes are put towards maintaining the Curl It! servers.</p>
-                            <a href="#" class="btn btn-primary float-right"><i class="fas fa-donate"></i>&nbsp; Donate through PayPal</a>
+                            <a href="https://paypal.me/mrfisc" target="_blank" class="btn btn-primary float-right"><i class="fas fa-donate"></i>&nbsp; Donate through PayPal</a>
                         </div>
                     </div>
 
+                    <br />
+
+                    <!-- GitHub -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">GitHub</h5>
+                            <p class="card-text">Visit <a href="https://github.com/nathan-fiscaletti" target="_blank">my github</a> to fork this project and see what else I've been up to!</p>
+                        </div>
+                    </div>
+    
                     <br />
                 </div>
             </div>
