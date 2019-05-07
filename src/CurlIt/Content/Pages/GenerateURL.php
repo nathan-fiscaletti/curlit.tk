@@ -32,7 +32,7 @@ class GenerateURL extends Block
         $curl->payload = $data['payload'];
         $curl->http_user = $data['http_auth']['user'];
         $curl->http_password = $data['http_auth']['pass'];
-        $curl->insecure = $data['insecure'] ? 1 : 0;
+        $curl->insecure = $data['insecure'] == "true" ? 1 : 0;
         $curl->parameters = json_encode($data['parameters']);
         $curl->headers = json_encode($data['headers']);
 
