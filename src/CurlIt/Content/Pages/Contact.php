@@ -37,6 +37,12 @@ class Contact extends Page
      */
     public function getParameter($key)
     {
-       /* Not implemented */
+       if ($key == 'contact_email') {
+           $config = include '../config/web.php';
+           return $config['contact_email'];
+       } else if ($key == 'contact_site') {
+        $config = include '../config/web.php';
+        return $config['site'];
+       }
     }
 }

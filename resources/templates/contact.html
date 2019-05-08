@@ -36,26 +36,28 @@
                 <div class="col-sm-12">
                     <!-- Main Form -->
                     <br />
-                    <form>
+                    <form action="https://formspree.io/{{contact_email}}" method="POST">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Contact</h4><br />
                                 <div class="form-row">
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" placeholder="Name..." /><br />
+                                        <input type="text" class="form-control" name="name" placeholder="Name..." /><br />
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="email" class="form-control" placeholder="Email..." /><br />
+                                        <input type="email" class="form-control" name="_replyto" placeholder="Email..." /><br />
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-sm-12">
-                                        <textarea class="form-control" placeholder="Message..." style="height: 150px;"></textarea><br />
+                                        <textarea class="form-control" name="message" placeholder="Message..." style="height: 150px;"></textarea><br />
+                                        <input type="text" name="_gotcha" style="display: none;">
+                                        <input type="hidden" name="_subject" value="Message from {{contact_site}}" />
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-sm-12">
-                                        <a href="#" class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Send Message</a>
+                                        <button class="btn btn-primary float-right"><i class="fas fa-paper-plane"></i>&nbsp; Send</button>
                                     </div>
                                 </div>
                             </div>
@@ -89,19 +91,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
         <script type="text/javascript" src="./assets/jquery/js/jquery-3.4.0.js"></script>
         <script type="text/javascript" src="./assets/bootstrap/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="./assets/js/script.js"></script>
-        <script>
-            // Set up the ACE editor for the "Payload" section.
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/chaos");
-            editor.session.setMode("ace/mode/javascript");
-            editor.setShowPrintMargin(false);
-            editor.renderer.setShowGutter(false);
-            $(".ace_gutter").css("background", "#202020");
-
-            editor.session.on('change', function(delta) {
-                payloadChanged(editor);
-            });
-        </script>
     </body>
 </html>

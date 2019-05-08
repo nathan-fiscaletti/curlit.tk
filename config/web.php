@@ -18,6 +18,11 @@ return [
     'site' => 'curlit.tk',
 
     /**
+     * The email at which to contact site administrators.
+     */
+    'contact_email' => 'fisc510@gmail.com',
+
+    /**
      * Development / Production Toggle
      * 
      * When set to Development, URLs will not

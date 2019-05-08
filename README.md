@@ -20,5 +20,7 @@
 composer install
 ```
 
+6. Open your site and use the contact form once to activate formspree.
+
 6. You're ready to go!
 
