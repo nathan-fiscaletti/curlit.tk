@@ -19,6 +19,6 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "nafisc/mysqli-wrapper": "^1.9"
+        "nafisc/mysqli-wrapper": "v1.9"
     }
 }
